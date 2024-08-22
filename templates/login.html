@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <style>
+            body {
+                background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            }
+        </style>
+    </head>
+    <body class="flex items-center justify-center min-h-screen">
+        <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-semibold mb-6 text-gray-800">Login</h1>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-600 font-medium mb-2">email</label>
+                    <input type="text" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-600 font-medium mb-2">Password</label>
+                    <input type="password" id="password" name="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Login</button>
+            </form>
+        </div>
+        <script>
+            document.getElementById('login-form').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('access_token', result.access_token);
+                    alert('Login successful');
+                    location.href='/reviews';
+                } else {
+                    alert(result.message);
+                }
+            });
+        </script>
+    </body>
+</html>
